@@ -1,26 +1,151 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* =========================================================
+   EventSmart — Design tokens (Tailwind v4 @theme)
+   ========================================================= */
+@theme {
+  --color-brand: #2563eb;
+  --color-brand-dark: #1d4ed8;
+  --color-brand-glow: #3b82f6;
+  --color-brand-surface: #eff6ff;
+  --color-brand-border: #dbeafe;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-frame: #b8cee2;
+  --color-canvas: #f5f6f9;
+  --color-ink: #0f172a;
+  --color-muted: #64748b;
+  --color-faint: #94a3b8;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --font-sans: var(--font-jakarta), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: var(--font-anton), "Oswald", sans-serif;
+  --font-script: var(--font-pinyon), cursive;
+  --font-mono: var(--font-grotesk), monospace;
+
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-spin-slow: spin 9s linear infinite;
+  --animate-pulse-dot: pulse-dot 1.4s infinite;
+  --animate-scan-line: scan-line 2.2s ease-in-out infinite;
+  --animate-grow: grow 2.5s linear forwards;
+
+  @keyframes grow {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  @keyframes scan-line {
+    0%,
+    100% {
+      top: 8%;
+    }
+    50% {
+      top: 92%;
+    }
+  }
+
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      transform: scale(0.9);
+      opacity: 0.7;
+    }
+    50% {
+      transform: scale(1.4);
+      opacity: 1;
+    }
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================================
+   Preloader — piezas que no conviene expresar en utilidades
+   ========================================================= */
+@layer components {
+  /* Textura de puntos del lienzo */
+  .dot-grid {
+    background-image: radial-gradient(#cbd5e1 1.1px, transparent 1.1px);
+    background-size: 24px 24px;
+  }
+
+  /* Cinta washi translúcida */
+  .tape {
+    position: absolute;
+    z-index: 20;
+    height: 18px;
+    width: 60px;
+    background: rgb(219 234 254 / 0.85);
+    backdrop-filter: blur(3px);
+    border-inline: 2px dashed rgb(255 255 255 / 0.6);
+    box-shadow: 0 1px 4px rgb(15 23 42 / 0.12);
+  }
+  .tape-top {
+    top: -9px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+  }
+  .tape-slant {
+    top: -8px;
+    right: 18px;
+    width: 55px;
+    transform: rotate(14deg);
+  }
+  .tape-right {
+    top: 50%;
+    right: -12px;
+    width: 50px;
+    transform: translateY(-50%) rotate(88deg);
+    background: rgb(254 240 138 / 0.85);
+  }
+
+  /* Matriz del QR */
+  .qr-matrix {
+    background-image:
+      radial-gradient(#0f172a 2px, transparent 2px),
+      radial-gradient(#0f172a 2px, #f8fafc 2px);
+    background-size: 8px 8px;
+    background-position:
+      0 0,
+      4px 4px;
+  }
+
+  /* "Fotos" generadas con gradientes (reemplazables por imágenes reales) */
+  .photo-laser {
+    background:
+      linear-gradient(115deg, transparent 46%, rgb(56 189 248 / 0.75) 48%, transparent 50%),
+      linear-gradient(65deg, transparent 46%, rgb(168 85 247 / 0.7) 48%, transparent 50%),
+      linear-gradient(90deg, transparent 49%, rgb(59 130 246 / 0.8) 50%, transparent 51%),
+      radial-gradient(ellipse at 50% 100%, rgb(15 23 42) 25%, transparent 26%),
+      radial-gradient(circle at 50% 10%, #60a5fa 0%, #1e3a8a 35%, #020617 75%);
+  }
+  .photo-crowd {
+    background:
+      radial-gradient(circle at 20% 92%, #1c1917 14%, transparent 15%),
+      radial-gradient(circle at 45% 96%, #1c1917 16%, transparent 17%),
+      radial-gradient(circle at 75% 93%, #1c1917 15%, transparent 16%),
+      radial-gradient(circle at 50% 30%, #fde68a 0%, #f59e0b 25%, #b45309 55%, #451a03 90%);
+  }
+  .photo-dj {
+    background:
+      linear-gradient(180deg, transparent 62%, #0f172a 62%, #1e1b4b 100%),
+      repeating-linear-gradient(90deg, rgb(236 72 153 / 0.35) 0 6px, transparent 6px 18px),
+      radial-gradient(circle at 30% 20%, rgb(236 72 153 / 0.9), transparent 45%),
+      radial-gradient(circle at 75% 25%, rgb(34 211 238 / 0.9), transparent 45%),
+      linear-gradient(180deg, #312e81, #0f172a);
+  }
+  .photo-sunset {
+    background:
+      linear-gradient(180deg, transparent 68%, #1e293b 68%),
+      radial-gradient(circle at 50% 66%, #fef3c7 0%, #fb923c 12%, transparent 30%),
+      linear-gradient(180deg, #7c3aed 0%, #ec4899 40%, #fb923c 70%);
+  }
 }
